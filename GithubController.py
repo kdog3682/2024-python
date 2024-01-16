@@ -18,7 +18,9 @@ def write_gitignore_file(dir):
     filetype = infer_filetype_from_directory_files(dir)
     patterns = variables.git_ignore_patterns.get(filetype)
     if patterns:
-        write(".gitignore", join(patterns), dir = dir)
+        text = join(patterns, "\n")
+        write(".gitignore", text, dir = dir)
+        "/home/kdog3682/2024-python/.gitignore"
 
 class Github:
     
@@ -40,7 +42,7 @@ class Github:
     
 
     def __init__(self, key=None):
-        self.token = env.github_token_ref[key]
+        self.token = env.github_token_map[key]
         self.github = github.Github(self.token)
         self.user = self.github.get_user()
         self.username = self.user.login
@@ -236,6 +238,7 @@ def update_repo(repo, file = "", content=None, name = None):
 def example(g):
     # g.initialize_local_directory("~/2024") # it wont initialize because it already exists
     g.initialize_local_directory("~/2024-python")
+
 def run(fn, *args, **kwargs):
     controller = GithubController(key='kdog3682')
     with blue_sandwich():
@@ -246,4 +249,5 @@ def run(fn, *args, **kwargs):
     fn(controller, *args, **kwargs)
 
 if __name__ == "__main__":
-    run(example)
+    # run(example)
+    write_gitignore_file("~/2024-python")
