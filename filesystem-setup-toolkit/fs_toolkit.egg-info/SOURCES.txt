@@ -1,8 +1,0 @@
-setup.py
-fs_toolkit/__init__.py
-fs_toolkit/abc.py
-fs_toolkit/create_pip_package.py
-fs_toolkit.egg-info/PKG-INFO
-fs_toolkit.egg-info/SOURCES.txt
-fs_toolkit.egg-info/dependency_links.txt
-fs_toolkit.egg-info/top_level.txt
