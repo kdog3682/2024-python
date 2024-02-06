@@ -165,7 +165,7 @@ class GithubController(Github):
             update_repo(self.repo, content = content, name = path)
     
 
-    def initialize_local_directory(self, dir):
+    def initialize_local_directory(self, dir, git_ignore = None):
         """
             turns the given directory into a git repo
             optionally writes gitignore 
@@ -202,7 +202,8 @@ class GithubController(Github):
             git push -u origin main 
         """, confirm = 1)
 
-        write_gitignore_file(dir)
+        if git_ignore:
+            write_gitignore_file(dir, git_ignore)
         self.open_url()
 
 def update_repo(repo, file = "", content=None, name = None):
@@ -213,16 +214,18 @@ def update_repo(repo, file = "", content=None, name = None):
     path = name or tail(file)
 
     try:
-        return repo.create_file(
+        value = repo.create_file(
             path=path,
             message=f"uploading {path}",
             content=content,
             branch=branch,
         )
+        return value
 
     except Exception as e:
-        print(str(e))
+        # print(str(e))
         reference = repo.get_contents(path, ref=branch)
+        # print("continuing")
         assert(reference)
 
         return repo.update_file(
@@ -233,11 +236,28 @@ def update_repo(repo, file = "", content=None, name = None):
             branch=branch,
         )
 
-
+ 
 
 def example(g):
+    return
+    # g.initialize_local_directory("~/2024-writing")
+    # g.initialize_local_directory("~/LOREMDIR")
+
+    # g.initialize_local_directory("~/2024-typst")
     # g.initialize_local_directory("~/2024") # it wont initialize because it already exists
-    g.initialize_local_directory("~/2024-python")
+    # g.initialize_local_directory("~/2024-python")
+    # g.initialize_local_directory("~/2024-writing")
+    # g.setRepo("kdog3682.github.io")
+    # uploaded = g.upload_file("focus", content = "<p style = color: red>focus!</p>", name = "focus.html")
+    # print(uploaded)
+    # uploaded = g.upload_file("dogs", content = "<p style = color: red>dogs!</p>", name = "animals/dogs.html")
+    # print(uploaded)
+    # uploaded = g.upload_file("cats", content = "<p style=\"color: red\">cattts!</p>", name = "animals/cats.html")
+    # print(uploaded)
+
+    # uploaded = g.upload_file("cats", content = "<p style = color: red>this is the index for animals!</p>", name = "animals.html")
+    # print(uploaded)
+
 
 def run(fn, *args, **kwargs):
     controller = GithubController(key='kdog3682')
@@ -249,5 +269,4 @@ def run(fn, *args, **kwargs):
     fn(controller, *args, **kwargs)
 
 if __name__ == "__main__":
-    # run(example)
-    write_gitignore_file("~/2024-python")
+    run(example)
